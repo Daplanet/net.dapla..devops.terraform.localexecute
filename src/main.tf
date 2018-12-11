@@ -1,18 +1,13 @@
-resource "null_resource" "first" {
+resource "null_resource" "provision_ansible" {
   provisioner "local-exec" {
-    command = "echo 'first'"
+    command = "apk add --no-cache ansible"
   }
 }
 
-resource "null_resource" "second" {
+resource "null_resource" "ping" {
+  depends_on = ["null_resource.provision_ansible"]
   provisioner "local-exec" {
-    command = "echo 'second'"
-  }
-}
-
-resource "null_resource" "third" {
-  provisioner "local-exec" {
-    command = "echo 'third'"
+    command = "/usr/bin/ansible -m setup all"
   }
 }
 
