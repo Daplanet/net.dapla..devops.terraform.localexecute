@@ -4,13 +4,26 @@ from pyinvoke import task
 from docker import Client
 
 @task(default=True)
-def build(ctx):
-  cli = Client(base_url="unix:///var/run/docker.sock")
+def build(ctx, image_name='ghcr.io/Daplanet/terraform-localexecute:latest'):
+  """
+  Builds base docker image and pushes to <image_name>
+  """
+  
   try:
-    cli.login(registry="ghcr.io", user="denzuko", password=getenv('GITHUB_TOKEN'))
-    cli.build(path='.', tag="ghcr.io/Daplanet/terraform-localexecute:latest")
+    
+    cli = Client(base_url="unix:///var/run/docker.sock")
+
+    cli.login(registry=image_name.split('/',1)[0], user="denzuko", password=getenv('GITHUB_TOKEN'))
+    cli.build(path='.', tag=image_name)
+    cli.push(image_name)
+    
   except Exception as err:
     print(err)
     sys.exit(1)
+    
   finally:
     del(cli)
+
+@task
+def help(ctx):
+  ctx.run("invoke --list")

@@ -1,0 +1,7 @@
+docker-py
+ansible
+pywinrm
+pywinrm[kerberos]
+invocations
+invoke
+python-terraform
