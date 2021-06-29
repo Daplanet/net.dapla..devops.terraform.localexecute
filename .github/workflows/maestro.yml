@@ -25,10 +25,11 @@ jobs:
       - name: setup python
         uses: actions/setup-python@v2
         with:
-          python-version: 3.9 #install the python needed
-          - name: execute tasks # run the run.py to get the latest data
-            run: |
-              pip install -r requirements.txt
-              invoke
-            env:
-              GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          python-version: 3.9
+
+      - name: execute tasks
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          pip install -r requirements.txt
+          invoke build
